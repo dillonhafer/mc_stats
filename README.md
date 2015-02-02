@@ -6,7 +6,7 @@ of Minecraft player statistics.
 ## Usage
 
     usage:  mc_stats [options]
-      -dir="~/minecraft/World": path to Minecraft world
+      -world="/home/user/minecraft/World": path to Minecraft world
 
 ## Example
 
