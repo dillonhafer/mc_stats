@@ -21,7 +21,7 @@ func statsDirExists(path string) (bool, error) {
 	return false, err
 }
 
-func readPlayers(dir string) http.HandlerFunc {
+func readPlayers(userCache string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusBadRequest)
@@ -30,8 +30,7 @@ func readPlayers(dir string) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		path := filepath.Join(dir, "usercache.json")
-		player_json, _ := ioutil.ReadFile(path)
+		player_json, _ := ioutil.ReadFile(userCache)
 		fmt.Fprint(w, string(player_json))
 	}
 }
@@ -67,15 +66,16 @@ func readStats(dir string) http.HandlerFunc {
 }
 
 func main() {
-	var dir string
 	var world string
 	staticFiles := http.FileServer(http.Dir("public"))
-	flag.StringVar(&dir, "dir", "", "path to Minecraft")
 	flag.StringVar(&world, "world", "", "path to Minecraft world")
 	flag.Parse()
 
-	statsPath := filepath.Join(dir, world, "stats")
+	statsPath := filepath.Join(world, "stats")
+	userCache := filepath.Join(world, "..", "usercache.json")
+	fmt.Println(userCache)
 	properStatsDir, _ := statsDirExists(statsPath)
+
 	if !properStatsDir {
 		fmt.Fprintln(os.Stderr, "You must provide a directory the world.")
 		fmt.Println("Run `mc_stats -h` for more startup options")
@@ -84,7 +84,7 @@ func main() {
 
 	http.Handle("/", staticFiles)
 	http.HandleFunc("/stats", readStats(statsPath))
-	http.HandleFunc("/players", readPlayers(dir))
+	http.HandleFunc("/players", readPlayers(userCache))
 
 	fmt.Println("Server running and listening on port 22334")
 	fmt.Println("Run `mc_stats -h` for more startup options")
