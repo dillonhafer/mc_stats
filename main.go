@@ -45,7 +45,7 @@ func readStats(dir string) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 
 		files, _ := ioutil.ReadDir(dir)
-		players := make([]string, 0, len(files))
+		AllStats := make([]string, 0, len(files))
 
 		for _, file := range files {
 			path := filepath.Join(dir, file.Name())
@@ -54,14 +54,14 @@ func readStats(dir string) http.HandlerFunc {
 			name := filename[0 : len(filename)-len(extension)]
 
 			f, _ := ioutil.ReadFile(path)
-			player := fmt.Sprintf("{\"UUID\": \"%s\", \"data\": %s}", name, f)
-			players = append(players, player)
+			playerStats := fmt.Sprintf("{\"UUID\": \"%s\", \"data\": %s}", name, f)
+			AllStats = append(AllStats, playerStats)
 		}
 
-		player_json := "["
-		player_json += strings.Join(players, ",")
-		player_json += "]"
-		fmt.Fprint(w, player_json)
+		statsJson := "["
+		statsJson += strings.Join(AllStats, ",")
+		statsJson += "]"
+		fmt.Fprint(w, statsJson)
 	}
 }
 
@@ -73,7 +73,6 @@ func main() {
 
 	statsPath := filepath.Join(world, "stats")
 	userCache := filepath.Join(world, "..", "usercache.json")
-	fmt.Println(userCache)
 	properStatsDir, _ := statsDirExists(statsPath)
 
 	if !properStatsDir {
