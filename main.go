@@ -76,8 +76,7 @@ func main() {
 	properStatsDir, _ := statsDirExists(statsPath)
 
 	if !properStatsDir {
-		fmt.Fprintln(os.Stderr, "You must provide a directory the world.")
-		fmt.Println("Run `mc_stats -h` for more startup options")
+		fmt.Fprintln(os.Stderr, "You must provide a directory to the world.")
 		return
 	}
 
