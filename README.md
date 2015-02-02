@@ -1,16 +1,12 @@
 # Minecraft Stats
 
-mc_stats is a simple webserver to allow web-access of
+mc_stats is a simple webserver to allow web-access
 of Minecraft player statistics.
 
 ## Usage
 
     usage:  mc_stats [options]
       -world="/home/user/minecraft/World": path to Minecraft world
-
-## Example
-
-TODO
 
 ## Copyright
 
