@@ -43,13 +43,24 @@
     return li
   }
 
-  $(document).foundation();
+  function Render() {
+    $.get("/stats", function(players) {
+      $('.main').hide().html('')
+      for(var i in players) {
+        player = createPlayer(players[i]);
+        $('.main').append(player)
+      }
+      setNames()
+      $('.main').fadeIn()
+    })
+  }
 
-  $.get("/stats", function(players) {
-    for(var i in players) {
-      player = createPlayer(players[i]);
-      $('.main').append(player)
-    }
-    setNames()
+  $(document).foundation();
+  Render()
+
+  $(document).on('click', '.refresh', function(e) {
+    e.preventDefault()
+    $('.main').fadeOut(100)
+    Render()
   })
 }).call(this)
