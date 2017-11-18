@@ -1,2 +1,4 @@
 mc_stats
 rerun.sh
+fake_minecraft
+.env.deploy

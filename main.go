@@ -1,13 +1,14 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/gobuffalo/envy"
 )
 
 func statsDirExists(path string) (bool, error) {
@@ -66,10 +67,8 @@ func readStats(dir string) http.HandlerFunc {
 }
 
 func main() {
-	var world string
-	staticFiles := http.FileServer(http.Dir("public"))
-	flag.StringVar(&world, "world", "", "path to Minecraft world")
-	flag.Parse()
+	world := envy.Get("WORLD", "fake_minecraft/Fakeworld")
+	staticFiles := http.FileServer(http.Dir("frontend/build"))
 
 	statsPath := filepath.Join(world, "stats")
 	userCache := filepath.Join(world, "..", "usercache.json")
@@ -87,6 +86,6 @@ func main() {
 	fmt.Println("Server running and listening on port 22334")
 	fmt.Println("Run `mc_stats -h` for more startup options")
 	fmt.Println("Ctrl-C to shutdown server")
-	err := http.ListenAndServe(":22334", nil)
+	err := http.ListenAndServe("127.0.0.1:22334", nil)
 	fmt.Fprintln(os.Stderr, err)
 }

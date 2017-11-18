@@ -1,0 +1,58 @@
+.App {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 50px;
+  justify-content: center;
+}
+
+.loading {
+  font-size: 22px;
+  position: fixed;
+  top: 25;
+  left: 0;
+  background: white;
+  padding: 30px;
+}
+.player {
+  flex: 0 25%;
+  box-sizing: border-box;
+}
+.player table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #efefef;
+}
+.player tr td {
+  padding: 5px;
+}
+.player tr:nth-child(even) {
+  background-color: #efefef;
+}
+
+.react-tabs__tab-list {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.react-tabs__tab-list li {
+  list-style-type: none;
+  display: inline;
+  list-style: inline;
+  cursor: pointer;
+  border-bottom: 3px solid #fff;
+  font-weight: bold;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 10px;
+  transition: all 0.25s ease-in-out;
+}
+.react-tabs__tab-list li:hover {
+  border-bottom: 3px solid #eee;
+}
+li.react-tabs__tab--selected:hover,
+li.react-tabs__tab--selected {
+  border-bottom: 3px solid #139afc;
+}
