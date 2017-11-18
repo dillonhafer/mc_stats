@@ -25,14 +25,6 @@ const Player = ({ player, data }) => {
     <div className="player">
       <table style={{ width: '100%', padding: '8px' }}>
         <tbody>
-          <DataRow label="Died:" value={data['stat.deaths']} />
-          <DataRow label="Chests Opened:" value={data['stat.chestOpened']} />
-          <DataRow label="Animals Bred:" value={data['stat.animalsBred']} />
-          <DataRow label="Left Game:" value={data['stat.leaveGame']} />
-          <DataRow
-            label="Villagers Talked To:"
-            value={data['stat.talkedToVillager']}
-          />
           {Object.entries(statMap).map(e => {
             const label = e[1];
             const key = e[0];
