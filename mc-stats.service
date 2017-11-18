@@ -5,6 +5,8 @@ After=network.target
 
 [Service]
 Environment=WORLD=/home/minecraft/minecraft/Hashrocket
+Environment=PORT=22334
+Environment=ADDR=0.0.0.0
 
 Type=simple
 User=minecraft

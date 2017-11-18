@@ -84,9 +84,18 @@ func main() {
 	http.HandleFunc("/stats", readStats(statsPath))
 	http.HandleFunc("/players", readPlayers(userCache))
 
-	fmt.Println("Server running and listening on port 22334")
+	port := "22334"
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
+
+	addr := "127.0.0.1"
+	if os.Getenv("ADDR") != "" {
+		addr = os.Getenv("ADDR")
+	}
+	fmt.Println("Server running and listening on port " + port)
 	fmt.Println("Run `mc_stats -h` for more startup options")
 	fmt.Println("Ctrl-C to shutdown server")
-	err := http.ListenAndServe("127.0.0.1:22334", nil)
+	err := http.ListenAndServe(addr+":"+port, nil)
 	fmt.Fprintln(os.Stderr, err)
 }
