@@ -45,6 +45,8 @@ class App extends Component {
     players: [],
     stats: [],
     debug: false,
+    requests: 0,
+    lastUpdated: new Date(),
   };
 
   componentDidMount() {
@@ -61,9 +63,12 @@ class App extends Component {
   };
 
   renderDebug = () => {
+    const { requests, lastUpdated } = this.state;
     return (
       <div className="debug">
         Debug mode
+        <p>Requests Made: {requests}</p>
+        <p>Last Updated: {lastUpdated.toString()}</p>
         <table>
           <tbody>
             <tr>
@@ -139,7 +144,7 @@ class App extends Component {
     );
   };
 
-  loadStats = async () => {
+  request = async url => {
     try {
       this.setState({ loading: true });
 
@@ -151,39 +156,33 @@ class App extends Component {
         method: 'GET',
       };
 
-      const r = await fetch('/stats', request);
+      const r = await fetch(url, request);
       const json = await r.json();
       if (json) {
-        this.setState({ stats: json });
+        return { ok: true, json };
       }
     } catch (err) {
       console.warn(err);
     } finally {
-      this.setState({ loading: false });
+      this.setState({
+        loading: false,
+        requests: this.state.requests + 1,
+        lastUpdated: new Date(),
+      });
+    }
+  };
+
+  loadStats = async () => {
+    const resp = await this.request('/stats');
+    if (resp && resp.ok) {
+      this.setState({ stats: resp.json });
     }
   };
 
   loadPlayers = async () => {
-    try {
-      this.setState({ loading: true });
-
-      const request = {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        method: 'GET',
-      };
-
-      const r = await fetch('/players', request);
-      const json = await r.json();
-      if (json) {
-        this.setState({ players: json });
-      }
-    } catch (err) {
-      console.warn(err);
-    } finally {
-      this.setState({ loading: false });
+    const resp = await this.request('/players');
+    if (resp && resp.ok) {
+      this.setState({ players: resp.json });
     }
   };
 
