@@ -3,16 +3,24 @@ import './App.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import statMap from './statMap';
 
+const timeFormat = label => {
+  return ['Minutes Played', 'Since Last Death', 'Sneak Time'].includes(label);
+};
+
+const distanceFormat = label => {
+  return label.startsWith('Distance');
+};
+
 const leaderKey = 220;
 const DataRow = ({ label, value }) => {
   let v = value || '😐';
 
-  if (value && (label === 'Minutes Played' || label === 'Since Last Death')) {
+  if (value && timeFormat(label)) {
     v = (value * 0.05 / 60).toFixed(2);
     v += ' (' + (v / 60).toFixed() + ' hours)';
   }
 
-  if (value && label.startsWith('Distance ')) {
+  if (value && distanceFormat(label)) {
     v = (value / 100 / 1000).toFixed() + ' km, ';
     v += (value / 100).toFixed() + ' meters';
   }
