@@ -83,3 +83,26 @@ li.react-tabs__tab--selected {
   margin: 10px;
   padding: 8px;
 }
+
+.player {
+  border-top: 3px solid #efefef;
+  padding-top: 20px;
+}
+.player img {
+  box-shadow: 0 1px 3px #aaa;
+  border: 3px solid whitesmoke;
+  background: whitesmoke;
+  height: 140px;
+}
+table.position {
+  margin-top: 30px;
+}
+table.position th {
+  background: #333;
+  color: white;
+  padding: 5px;
+  border: 1px solid #333;
+}
+table.position td {
+  border: 1px solid #333;
+}

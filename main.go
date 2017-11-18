@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -14,6 +15,7 @@ import (
 	"time"
 
 	"github.com/dillonhafer/mc_stats/gziphandler"
+	"github.com/dillonhafer/mc_stats/nbt"
 )
 
 func searchForWorlds() (string, error) {
@@ -70,7 +72,7 @@ func statsDirExists(path string) (bool, error) {
 	return false, err
 }
 
-func readPlayers(userCache string) http.HandlerFunc {
+func readPlayers(userCache, playerData string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		println(fmt.Sprintf("[%s] GET /players", time.Now().String()))
 		if r.Method != "GET" {
@@ -80,12 +82,29 @@ func readPlayers(userCache string) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		player_json, err := ioutil.ReadFile(userCache)
+
+		users := []nbt.Player{}
+		usersCache, err := os.Open(userCache)
+		if err != nil {
+			return
+		}
+		jsonParser := json.NewDecoder(usersCache)
+		if err = jsonParser.Decode(&users); err != nil {
+			return
+		}
+		for i, _ := range users {
+			user := &users[i]
+			player := nbt.Load(filepath.Join(playerData, user.UUID+".dat"))
+			user.X = player.X
+			user.Y = player.Y
+			user.Z = player.Z
+			user.Xp = player.Xp
+		}
 
 		if err != nil {
-			fmt.Fprint(w, `[]`)
+			fmt.Fprint(w, "[]")
 		} else {
-			fmt.Fprint(w, string(player_json))
+			json.NewEncoder(w).Encode(users)
 		}
 	}
 }
@@ -137,6 +156,7 @@ func main() {
 
 	statsPath := filepath.Join(world, "stats")
 	userCache := filepath.Join(world, "..", "usercache.json")
+	playerData := filepath.Join(world, "playerdata")
 	properStatsDir, _ := statsDirExists(statsPath)
 
 	if !properStatsDir {
@@ -145,7 +165,7 @@ func main() {
 	}
 
 	stats := gziphandler.GzipHandler(readStats(statsPath))
-	players := gziphandler.GzipHandler(readPlayers(userCache))
+	players := gziphandler.GzipHandler(readPlayers(userCache, playerData))
 
 	http.Handle("/", staticFiles)
 	http.Handle("/stats", stats)

@@ -36,6 +36,38 @@ const DataRow = ({ label, value }) => {
 const Player = ({ player, data }) => {
   return (
     <div className="player">
+      <div style={{ float: 'left', textAlign: 'center', width: '300px' }}>
+        <img
+          src={`https://crafatar.com/renders/body/${player.uuid}?overlay=true`}
+        />
+        <p>
+          <b>{player.name}</b>{' '}
+          <span style={{ color: 'limegreen', fontWeight: 'bold' }}>
+            ({player.level})
+          </span>
+        </p>
+      </div>
+      <table
+        className="position"
+        style={{ textAlign: 'center', width: '325px', padding: '8px' }}
+      >
+        <caption>Position</caption>
+        <thead>
+          <tr>
+            <th>x</th>
+            <th>y</th>
+            <th>z</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{player.x.toFixed()}</td>
+            <td>{player.y.toFixed()}</td>
+            <td>{player.z.toFixed()}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
       <table style={{ width: '100%', padding: '8px' }}>
         <tbody>
           {Object.entries(statMap).map(e => {
@@ -83,6 +115,10 @@ class App extends Component {
           <tbody>
             <tr>
               <td colSpan="2">Players</td>
+              <td>Level</td>
+              <td>X</td>
+              <td>Y</td>
+              <td>Z</td>
             </tr>
             {this.state.players.map(p => {
               return (
@@ -92,6 +128,10 @@ class App extends Component {
                 >
                   <td>{p.name}</td>
                   <td>{p.uuid}</td>
+                  <td>{p.level}</td>
+                  <td>{p.x}</td>
+                  <td>{p.y}</td>
+                  <td>{p.z}</td>
                 </tr>
               );
             })}
