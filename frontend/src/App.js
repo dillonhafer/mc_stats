@@ -185,7 +185,13 @@ class App extends Component {
   loadStats = async () => {
     const resp = await this.request('/stats');
     if (resp && resp.ok) {
-      this.setState({ stats: resp.json });
+      let players = this.state.players;
+      if (players.length <= 0) {
+        players = resp.json.map(s => {
+          return { name: 'Unknown', uuid: s.UUID };
+        });
+      }
+      this.setState({ stats: resp.json, players });
     }
   };
 
@@ -211,7 +217,7 @@ class App extends Component {
   };
 
   render() {
-    const { loading, debug } = this.state;
+    const { loading, debug, players } = this.state;
     const notLoading = !loading;
     return (
       <div className="App">
@@ -219,7 +225,7 @@ class App extends Component {
         {notLoading && this.players()}
         <Tabs defaultFocus={true}>
           <TabList>
-            {this.state.players.map(({ name }) => <Tab key={name}>{name}</Tab>)}
+            {players.map(({ name }) => <Tab key={name}>{name}</Tab>)}
           </TabList>
           {this.players()}
         </Tabs>
