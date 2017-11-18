@@ -21,7 +21,7 @@ Then select a server or pass the `WORLD` env var
 ```
 $ cd $GOPATH/src/github.com/dillonhafer/mc_stats/frontend
 $ yarn install
-$ yarn run
+$ yarn start
 ```
 
 ## Usage
