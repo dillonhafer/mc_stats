@@ -5,12 +5,17 @@ import statMap from './statMap';
 
 const leaderKey = 220;
 const DataRow = ({ label, value }) => {
+  let v = value || '😐';
+
+  if (label === 'Minutes Played') {
+    v = (value * 0.05 / 60).toFixed(2);
+    v += ' (' + (v / 60).toFixed() + ' hours)';
+  }
+
   return (
     <tr>
       <td style={{ fontWeight: 'bold', color: '#777' }}>{label}</td>
-      <td style={{ textAlign: 'right', fontWeight: 'bold' }}>
-        {value || '😐'}
-      </td>
+      <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{v}</td>
     </tr>
   );
 };
