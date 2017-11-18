@@ -3,6 +3,27 @@
 mc_stats is a simple webserver to allow web-access
 of Minecraft player statistics.
 
+
+## Quick Setup
+
+**Backend**
+
+```
+$ go get -u github.com/dillonhafer/mc_stats
+$ cd $GOPATH/src/github.com/dillonhafer/mc_stats
+$ go build && ./mc_stats
+```
+
+Then select a server or pass the `WORLD` env var
+
+**Frontend**
+
+```
+$ cd $GOPATH/src/github.com/dillonhafer/mc_stats/frontend
+$ yarn install
+$ yarn run
+```
+
 ## Usage
 
     WORLD="/home/user/minecraft/World": path to Minecraft world
