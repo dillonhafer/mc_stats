@@ -7,9 +7,14 @@ const leaderKey = 220;
 const DataRow = ({ label, value }) => {
   let v = value || '😐';
 
-  if (label === 'Minutes Played') {
+  if (value && (label === 'Minutes Played' || label === 'Since Last Death')) {
     v = (value * 0.05 / 60).toFixed(2);
     v += ' (' + (v / 60).toFixed() + ' hours)';
+  }
+
+  if (value && label.startsWith('Distance ')) {
+    v = (value / 100 / 1000).toFixed() + ' km, ';
+    v += (value / 100).toFixed() + ' meters';
   }
 
   return (
