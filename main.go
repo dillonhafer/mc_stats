@@ -7,8 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/gobuffalo/envy"
 )
 
 func statsDirExists(path string) (bool, error) {
@@ -67,7 +65,10 @@ func readStats(dir string) http.HandlerFunc {
 }
 
 func main() {
-	world := envy.Get("WORLD", "fake_minecraft/Fakeworld")
+	world := "fake_minecraft/Fakeworld"
+	if os.Getenv("WORLD") != "" {
+		world = os.Getenv("WORLD")
+	}
 	staticFiles := http.FileServer(http.Dir("frontend/build"))
 
 	statsPath := filepath.Join(world, "stats")
