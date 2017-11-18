@@ -56,3 +56,29 @@ li.react-tabs__tab--selected:hover,
 li.react-tabs__tab--selected {
   border-bottom: 3px solid #139afc;
 }
+
+.debug {
+  font-family: monospace;
+  color: #ededed;
+  background-color: #333333dd;
+  width: 100%;
+  position: fixed;
+  overflow: scroll;
+  top: 0;
+  max-height: 100%;
+}
+
+.debug td {
+  border: 1px solid #ededed;
+}
+
+.debug tr:hover {
+  background: #ededed;
+  color: #333;
+  cursor: cell;
+}
+
+.debug input[type='search'] {
+  margin: 10px;
+  padding: 8px;
+}

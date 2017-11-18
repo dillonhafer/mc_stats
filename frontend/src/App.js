@@ -3,6 +3,7 @@ import './App.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import statMap from './statMap';
 
+const leaderKey = 220;
 const DataRow = ({ label, value }) => {
   return (
     <tr>
@@ -43,13 +44,100 @@ class App extends Component {
     loading: false,
     players: [],
     stats: [],
+    debug: false,
   };
 
   componentDidMount() {
+    document.addEventListener('keydown', this.debugMode);
     this.loadPlayers();
     this.loadStats();
     window.setInterval(this.loadStats, 5000);
   }
+
+  debugMode = e => {
+    if (e.keyCode === leaderKey) {
+      this.setState({ debug: !this.state.debug });
+    }
+  };
+
+  renderDebug = () => {
+    return (
+      <div className="debug">
+        Debug mode
+        <table>
+          <tbody>
+            <tr>
+              <td colSpan="2">Players</td>
+            </tr>
+            {this.state.players.map(p => {
+              return (
+                <tr
+                  key={p.uuid}
+                  onClick={() => this.setState({ selectedDebugUUID: p.uuid })}
+                >
+                  <td>{p.name}</td>
+                  <td>{p.uuid}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <button
+          className="clearDebug"
+          onClick={() => this.setState({ selectedDebugUUID: null })}
+        >
+          Clear Selected UUID
+        </button>
+        <hr />
+        {this.state.selectedDebugUUID && this.renderDebugSelected()}
+      </div>
+    );
+  };
+
+  renderDebugSelected = () => {
+    const { selectedDebugUUID, stats, debugSearch } = this.state;
+    const data = stats.find(s => {
+      return s.UUID === selectedDebugUUID;
+    });
+
+    return (
+      <div>
+        <input
+          onChange={e => this.setState({ debugSearch: e.target.value })}
+          type="search"
+          placeholder="Search"
+        />
+        <table>
+          <tbody>
+            <tr>
+              <td colSpan="2">Data for {data.UUID}</td>
+            </tr>
+            {Object.entries(data.data).map(e => {
+              if (debugSearch) {
+                if (e[0].match(new RegExp(`.*${debugSearch}.*`, 'gi'))) {
+                  return (
+                    <tr key={e[0]}>
+                      <td>{e[0]}</td>
+                      <td>{e[1]}</td>
+                    </tr>
+                  );
+                } else {
+                  return null;
+                }
+              }
+
+              return (
+                <tr key={e[0]}>
+                  <td>{e[0]}</td>
+                  <td>{e[1]}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   loadStats = async () => {
     try {
@@ -114,10 +202,11 @@ class App extends Component {
   };
 
   render() {
-    const { loading } = this.state;
+    const { loading, debug } = this.state;
     const notLoading = !loading;
     return (
       <div className="App">
+        {debug && this.renderDebug()}
         {notLoading && this.players()}
         <Tabs defaultFocus={true}>
           <TabList>
