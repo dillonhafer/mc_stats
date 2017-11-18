@@ -25,6 +25,7 @@
   border: 1px solid #efefef;
 }
 .player tr td {
+  height: 26px;
   padding: 5px;
 }
 .player tr:nth-child(even) {
