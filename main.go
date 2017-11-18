@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/dillonhafer/mc_stats/gziphandler"
 )
 
 func statsDirExists(path string) (bool, error) {
@@ -80,9 +82,12 @@ func main() {
 		return
 	}
 
+	stats := gziphandler.GzipHandler(readStats(statsPath))
+	players := gziphandler.GzipHandler(readPlayers(userCache))
+
 	http.Handle("/", staticFiles)
-	http.HandleFunc("/stats", readStats(statsPath))
-	http.HandleFunc("/players", readPlayers(userCache))
+	http.Handle("/stats", stats)
+	http.Handle("/players", players)
 
 	port := "22334"
 	if os.Getenv("PORT") != "" {
