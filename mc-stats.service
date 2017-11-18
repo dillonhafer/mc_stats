@@ -1,0 +1,31 @@
+[Unit]
+Description=Minecraft Stats
+ConditionPathExists=/home/minecraft/mc_stats
+After=network.target
+
+[Service]
+Environment=WORLD=/home/minecraft/minecraft/Hashrocket
+
+Type=simple
+User=minecraft
+Group=minecraft
+LimitNOFILE=1024
+
+Restart=on-failure
+RestartSec=10
+startLimitIntervalSec=60
+
+WorkingDirectory=/home/minecraft
+ExecStart=/home/minecraft/mc_stats
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/mc-stats
+ExecStartPre=/bin/chown syslog:adm /var/log/mc-stats
+ExecStartPre=/bin/chmod 755 /var/log/mc-stats
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=mc-stats
+
+[Install]
+WantedBy=multi-user.target

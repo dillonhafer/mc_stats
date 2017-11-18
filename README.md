@@ -5,8 +5,8 @@ of Minecraft player statistics.
 
 ## Usage
 
-    usage:  mc_stats [options]
-      -world="/home/user/minecraft/World": path to Minecraft world
+    WORLD="/home/user/minecraft/World": path to Minecraft world
+    usage:  mc_stats
 
 ## Copyright
 
