@@ -22,6 +22,8 @@ export default {
     'stat.deaths': 'Number of Deaths',
     'stat.mobKills': 'Mob Kills',
     'stat.playerKills': 'Player Kills',
+    'stat.killEntity.Enderman': 'Endermen Slain',
+    'stat.entityKilledBy.Enderman': 'Slain by Enderman',
     'stat.drop': 'Items Dropped',
     'stat.itemEnchanted': 'Items Enchanted',
     'stat.animalsBred': 'Animals Bred',
