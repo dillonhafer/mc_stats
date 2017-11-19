@@ -3,6 +3,16 @@ import './App.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import statMap from './statMap';
 
+const colors = [
+  'red',
+  'green',
+  'blue',
+  'magenta',
+  'purple',
+  'cornflowerblue',
+  'gray',
+];
+
 const timeFormat = label => {
   return ['Minutes Played', 'Since Last Death', 'Sneak Time'].includes(label);
 };
@@ -38,6 +48,7 @@ const Player = ({ player, data }) => {
     <div className="player">
       <div style={{ float: 'left', textAlign: 'center', width: '300px' }}>
         <img
+          alt={player.name}
           src={`https://crafatar.com/renders/body/${player.uuid}?overlay=true`}
         />
         <p>
@@ -96,6 +107,7 @@ class App extends Component {
     this.loadPlayers();
     this.loadStats();
     window.setInterval(this.loadStats, 5000);
+    window.setInterval(this.loadPlayers, 6000);
   }
 
   debugMode = e => {
@@ -256,6 +268,42 @@ class App extends Component {
     });
   };
 
+  renderMap = () => {
+    let canvas = document.getElementById('map');
+    if (canvas && canvas.getContext) {
+      let context = canvas.getContext('2d');
+
+      for (var x = 0.5; x < 1001; x += 10) {
+        context.moveTo(x, 0);
+        context.lineTo(x, 1000);
+      }
+
+      for (var y = 0.5; y < 1001; y += 10) {
+        context.moveTo(0, y);
+        context.lineTo(1000, y);
+      }
+      context.strokeStyle = '#ddd';
+      context.stroke();
+
+      context.beginPath();
+      context.arc(500, 500, 20, 20, Math.PI * 2, true);
+      context.closePath();
+      context.fillStyle = '#DEDEDE';
+      context.fill();
+
+      this.state.players.map((p, i) => {
+        const x = parseInt((500 + p.x / 10).toFixed(1), 10);
+        const y = parseInt((500 + p.z / 10).toFixed(1), 10);
+        context.beginPath();
+        context.arc(x, y, 5, 5, Math.PI * 2, true);
+        context.closePath();
+        context.fillStyle = colors[i];
+        context.fill();
+        return null;
+      });
+    }
+  };
+
   render() {
     const { loading, debug, players } = this.state;
     const notLoading = !loading;
@@ -265,8 +313,22 @@ class App extends Component {
         {notLoading && this.players()}
         <Tabs defaultFocus={true}>
           <TabList>
+            <Tab key={'map'}>Map</Tab>
             {players.map(({ name }) => <Tab key={name}>{name}</Tab>)}
           </TabList>
+          <TabPanel key={'map'}>
+            <div style={{ width: '100%', overflow: 'scroll' }}>
+              {players.map(({ name, x, z }, i) => {
+                return (
+                  <li style={{ color: colors[i] }}>
+                    {name} X: {(x || 0).toFixed()} Z: {(z || 0).toFixed()}
+                  </li>
+                );
+              })}
+              <canvas id="map" width="1001px" height="1001px" />
+            </div>
+            {this.renderMap()}
+          </TabPanel>
           {this.players()}
         </Tabs>
       </div>
