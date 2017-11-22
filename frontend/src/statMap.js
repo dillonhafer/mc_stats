@@ -45,7 +45,6 @@ export default {
     'stat.chestOpened': 'Chests Opened',
     'stat.trappedChestTriggered': 'Trapped Chests Triggered',
     'stat.enderchestOpened': 'Ender Chests Opened',
-    'stat.noteblockPlayed': 'Noteblocks played',
     'stat.noteblockTuned': 'Noteblocks tuned',
     'stat.flowerPotted': 'Plants potted',
     'stat.recordPlayed': 'Records Played',
