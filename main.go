@@ -180,9 +180,25 @@ func main() {
 	if os.Getenv("ADDR") != "" {
 		addr = os.Getenv("ADDR")
 	}
+
+	cert := ""
+	key := ""
+	if os.Getenv("TLS_CERT") != "" {
+		cert = os.Getenv("TLS_CERT")
+	}
+	if os.Getenv("TLS_KEY") != "" {
+		key = os.Getenv("TLS_KEY")
+	}
+
 	fmt.Println("Server running and listening on port " + port)
 	fmt.Println("Run `mc_stats -h` for more startup options")
 	fmt.Println("Ctrl-C to shutdown server")
-	err := http.ListenAndServe(addr+":"+port, nil)
+
+	var err error
+	if cert != "" && key != "" {
+		err = http.ListenAndServeTLS(addr+":"+port, cert, key, nil)
+	} else {
+		err = http.ListenAndServe(addr+":"+port, nil)
+	}
 	fmt.Fprintln(os.Stderr, err)
 }
